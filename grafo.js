@@ -5,6 +5,7 @@ class Grafo {
     constructor(num_v) {
         this.numero_vertices = num_v;
         this.vertices = [];
+        this.route = [];
 
         for (let i = 0; i < num_v; i++) {
             this.vertices.push(new Vertice());
@@ -29,7 +30,8 @@ class Grafo {
 
     dfs(pos) {
         this.vertices[pos].visitado = 1;
-        console.log(pos);
+        //console.log(pos);
+        this.route.push(pos);
 
         for(let i = 0; i < this.vertices[pos].getTamanhoLista(); i++){
             let elemento = this.vertices[pos].getListaAdj()[i];
@@ -37,6 +39,16 @@ class Grafo {
                 this.dfs(elemento);
             }
         }
+    }
+
+    getRoute(partida){
+        this.zeraVisitados();
+
+        this.route = [];
+
+        this.dfs(partida);
+
+        return this.route;
     }
 
     teste(){

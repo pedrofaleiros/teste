@@ -20,6 +20,16 @@ app.get('/teste', (req, res) => {
     return res.json({"status":"OK"});
 })
 
+app.get('/route', (req, res) => {
+
+    if(grafo == null){
+        res.status(404);
+        return res.json({"Erro":"Grafo nulo"})
+    }
+
+    return res.json(grafo.getRoute(0));
+})
+
 app.post('/loadgrafo', (req, res) => {
     const { name } = req.body;
 
