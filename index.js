@@ -1,16 +1,26 @@
 const express = require('express');
 const Grafo = require('./grafo');
-const server = express();
+const app = express();
 //yarn dev
-server.use(express.json()); // faz com que o express entenda JSON
+app.use(express.json()); // faz com que o express entenda JSON
 
 var grafo = null;
 
-server.get('/getgrafo', (req, res) => {
+app.get('/getgrafo', (req, res) => {
+
+    if(grafo == null){
+        res.status(404);
+        return res.json({"Erro":"Grafo nulo"})
+    }
+
     return res.json(grafo);
 });
 
-server.post('/loadgrafo', (req, res) => {
+app.get('/teste', (req, res) => {
+    return res.json({"status":"OK"});
+})
+
+app.post('/loadgrafo', (req, res) => {
     const { name } = req.body;
 
     const num_v = req.body.vertices;
@@ -18,7 +28,7 @@ server.post('/loadgrafo', (req, res) => {
 
     var g = new Grafo(num_v);
 
-    for(let i = 0; i < arestas.length; i++){
+    for (let i = 0; i < arestas.length; i++) {
         let x = arestas[i][0]
         let y = arestas[i][1]
         g.addAresta(x, y)
@@ -30,4 +40,8 @@ server.post('/loadgrafo', (req, res) => {
     return res.json(grafo); // retorna a informação da variável users
 });
 
-server.listen(3000);
+const port = 3000;
+
+app.listen(port, () => {
+    console.log(`Example app listening on port ${port}`)
+});
