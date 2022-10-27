@@ -1,4 +1,4 @@
-var Vertice = require("./vertice.js");
+const Vertice = require("./vertice.js");
 
 class Grafo {
 
