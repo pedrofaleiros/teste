@@ -1,64 +1,42 @@
 const express = require('express');
 const Grafo = require('./grafo');
 const app = express();
+const cors = require('cors')
 //yarn dev
-app.use(express.json()); // faz com que o express entenda JSON
-
-var grafo = null;
-
-app.get('/getgrafo', (req, res) => {
-
-    if(grafo == null){
-        res.status(404);
-        return res.json({"Erro":"Grafo nulo"})
-    }
-
-    return res.json(grafo);
-});
+app.use(express.json());
+app.use(cors());
 
 app.get('/teste', (req, res) => {
-    return res.json({"status":"OK"});
-})
+    return res.json({ "status": "OK" });
+});
 
-app.get('/route', (req, res) => {
+app.post('/teste', (req, res) => {
+    console.log(req.body);
+    return res.json({ "status": "OK", 'response': req.body });
+});
 
-    const num_v = req.body.vertices;
-    const arestas = req.body.arestas;
+app.post('/route', (req, res) => {
 
-    var g = new Grafo(num_v);
+    if (req.body.vertices && req.body.arestas) {
+        const num_v = req.body.vertices;
+        const arestas = req.body.arestas;
 
-    for (let i = 0; i < arestas.length; i++) {
-        let x = arestas[i][0]
-        let y = arestas[i][1]
-        g.addAresta(x, y)
-        g.addAresta(y, x)
+        var g = new Grafo(num_v);
+
+        for (let i = 0; i < arestas.length; i++) {
+            let x = arestas[i][0];
+            let y = arestas[i][1];
+            g.addAresta(x, y);
+            g.addAresta(y, x);
+        }
+
+        const route = g.getRoute(0);
+
+        return res.json(route);
+
+    } else {
+        return res.json({ "status": "erro" });
     }
-
-    const route = g.getRoute(0);
-
-    console.log(route[0]);
-
-    return res.json(route);
-})
-
-app.post('/loadgrafo', (req, res) => {
-    const { name } = req.body;
-
-    const num_v = req.body.vertices;
-    const arestas = req.body.arestas;
-
-    var g = new Grafo(num_v);
-
-    for (let i = 0; i < arestas.length; i++) {
-        let x = arestas[i][0]
-        let y = arestas[i][1]
-        g.addAresta(x, y)
-        g.addAresta(y, x)
-    }
-
-    grafo = g;
-
-    return res.json(grafo); // retorna a informação da variável users
 });
 
 const port = 3000;
@@ -76,4 +54,5 @@ app.listen(port, () => {
     [1, 3],
     [2, 4]
     ]
-} */
+} 
+*/
